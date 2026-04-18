@@ -73,61 +73,78 @@ export function ContactList({
           const [distVal, distUnit] = formatDistance(store.distance).split(' ');
           const isSelected = selectedStoreId === store.placeId;
 
-          const handleClick = () => {
+          const handleSelect = () => {
             if (onSelectStore) {
               onSelectStore(store.placeId);
-            } else {
-              openInMaps(store.coordinates, store.name);
             }
+          };
+
+          const handleNavigate = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            openInMaps(store.coordinates, store.name);
           };
 
           return (
             <li key={store.placeId}>
-              <button
-                onClick={handleClick}
-                className={`w-full text-left flex items-center gap-2 py-2 px-2 text-[11px] t-mono transition-colors ${
+              <div
+                className={`flex items-center text-[11px] t-mono transition-colors ${
                   isSelected
                     ? 'bg-[color:var(--accent)]/[0.08] hover:bg-[color:var(--accent)]/[0.14]'
                     : 'hover:bg-white/[0.02]'
                 }`}
               >
-                <span className={`w-4 text-center ${isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--ink-faint)]'}`}>
-                  {isSelected ? '◆' : '○'}
-                </span>
-                <span
-                  className={`flex-1 truncate uppercase tracking-wide ${
-                    isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--ink)]'
-                  }`}
+                <button
+                  onClick={onSelectStore ? handleSelect : handleNavigate}
+                  className="flex-1 text-left flex items-center gap-2 py-2 px-2"
                 >
-                  {store.name}
-                </span>
-                <span
-                  className={`num-tabular hidden sm:inline ${isSelected ? 'text-[color:var(--accent-ink)]/80' : 'text-[color:var(--ink-soft)]'}`}
-                >
-                  {bearingStr}° {cardinal}
-                </span>
-                <span
-                  className={`num-tabular w-14 text-right ${isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--accent)]'}`}
-                >
-                  {distVal}
-                  <span
-                    className={`text-[9px] ml-1 ${isSelected ? 'text-[color:var(--accent-ink)]/70' : 'text-[color:var(--ink-faint)]'}`}
-                  >
-                    {distUnit}
+                  <span className={`w-4 text-center ${isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--ink-faint)]'}`}>
+                    {isSelected ? '◆' : '○'}
                   </span>
-                </span>
-                <span
-                  className={`text-[9px] tracking-widest w-12 text-right ${
-                    store.isOpen === true
-                      ? 'text-[color:var(--ok)]'
-                      : store.isOpen === false
-                        ? 'text-[color:var(--warn)]'
-                        : 'text-[color:var(--ink-faint)]'
-                  }`}
-                >
-                  {store.isOpen === true ? 'OPEN' : store.isOpen === false ? 'CLOSED' : 'UNKN'}
-                </span>
-              </button>
+                  <span
+                    className={`flex-1 truncate uppercase tracking-wide ${
+                      isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--ink)]'
+                    }`}
+                  >
+                    {store.name}
+                  </span>
+                  <span
+                    className={`num-tabular hidden sm:inline ${isSelected ? 'text-[color:var(--accent-ink)]/80' : 'text-[color:var(--ink-soft)]'}`}
+                  >
+                    {bearingStr}° {cardinal}
+                  </span>
+                  <span
+                    className={`num-tabular w-14 text-right ${isSelected ? 'text-[color:var(--accent-ink)]' : 'text-[color:var(--accent)]'}`}
+                  >
+                    {distVal}
+                    <span
+                      className={`text-[9px] ml-1 ${isSelected ? 'text-[color:var(--accent-ink)]/70' : 'text-[color:var(--ink-faint)]'}`}
+                    >
+                      {distUnit}
+                    </span>
+                  </span>
+                  <span
+                    className={`text-[9px] tracking-widest w-12 text-right ${
+                      store.isOpen === true
+                        ? 'text-[color:var(--ok)]'
+                        : store.isOpen === false
+                          ? 'text-[color:var(--warn)]'
+                          : 'text-[color:var(--ink-faint)]'
+                    }`}
+                  >
+                    {store.isOpen === true ? 'OPEN' : store.isOpen === false ? 'CLOSED' : 'UNKN'}
+                  </span>
+                </button>
+                {onSelectStore && (
+                  <button
+                    onClick={handleNavigate}
+                    className="shrink-0 px-2 py-2 text-[color:var(--ink-soft)] hover:text-[color:var(--accent)] transition-colors t-label text-[9px]"
+                    aria-label={`Navigate to ${store.name}`}
+                    title="Open in Maps"
+                  >
+                    ▸ NAV
+                  </button>
+                )}
+              </div>
             </li>
           );
         })}

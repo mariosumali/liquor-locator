@@ -1,18 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#1a1414" />
-      <stop offset="100%" stop-color="#08070a" />
+    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#0a1a12" />
+      <stop offset="100%" stop-color="#05110a" />
     </radialGradient>
     <linearGradient id="needle" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fcd34d" />
-      <stop offset="100%" stop-color="#d97706" />
+      <stop offset="0%" stop-color="#f5b233" />
+      <stop offset="100%" stop-color="#c78a1a" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5b233" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#f5b233" stop-opacity="0" />
     </linearGradient>
   </defs>
-  <circle cx="50" cy="50" r="46" fill="url(#bg)" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.4" />
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3" />
-  <polygon points="50,14 44,50 56,50" fill="url(#needle)" />
-  <polygon points="50,86 44,50 56,50" fill="#451a03" />
-  <circle cx="50" cy="50" r="7" fill="#fbbf24" />
-  <circle cx="50" cy="50" r="3" fill="#08070a" />
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#bg)" />
+  
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#f5b233" stroke-width="1.5" stroke-opacity="0.5" />
+  
+  <!-- Grid lines (tactical) -->
+  <line x1="50" y1="8" x2="50" y2="92" stroke="#91b682" stroke-width="0.5" stroke-opacity="0.2" />
+  <line x1="8" y1="50" x2="92" y2="50" stroke="#91b682" stroke-width="0.5" stroke-opacity="0.2" />
+  
+  <!-- Inner rings -->
+  <circle cx="50" cy="50" r="32" fill="none" stroke="#91b682" stroke-width="0.5" stroke-opacity="0.25" />
+  <circle cx="50" cy="50" r="18" fill="none" stroke="#91b682" stroke-width="0.5" stroke-opacity="0.2" />
+  
+  <!-- Compass needle (north - amber) -->
+  <polygon points="50,12 45,50 55,50" fill="url(#needle)" />
+  
+  <!-- Compass needle (south - dark) -->
+  <polygon points="50,88 45,50 55,50" fill="#1a2a1f" stroke="#91b682" stroke-width="0.5" stroke-opacity="0.3" />
+  
+  <!-- Center hub -->
+  <circle cx="50" cy="50" r="8" fill="#f5b233" />
+  <circle cx="50" cy="50" r="4" fill="#05110a" />
+  
+  <!-- Cardinal markers -->
+  <text x="50" y="7" font-family="monospace" font-size="5" fill="#cde6bc" text-anchor="middle" opacity="0.6">N</text>
 </svg>

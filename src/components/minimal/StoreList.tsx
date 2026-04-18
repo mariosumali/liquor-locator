@@ -37,54 +37,72 @@ export function StoreList({ stores, loading, selectedStoreId, onSelectStore }: S
         const [value, unit] = formatDistance(store.distance).split(' ');
         const isSelected = selectedStoreId === store.placeId;
 
-        const handleClick = () => {
+        const handleSelect = () => {
           if (onSelectStore) {
             onSelectStore(store.placeId);
-          } else {
-            openInMaps(store.coordinates, store.name);
           }
+        };
+
+        const handleNavigate = (e: React.MouseEvent) => {
+          e.stopPropagation();
+          openInMaps(store.coordinates, store.name);
         };
 
         return (
           <li key={store.placeId}>
-            <button
-              onClick={handleClick}
-              className={`w-full text-left py-3.5 flex items-baseline justify-between gap-4 transition-colors ${
+            <div
+              className={`flex items-center gap-2 transition-colors ${
                 isSelected
                   ? 'bg-[color:var(--accent)]/[0.06]'
                   : 'hover:bg-white/[0.015]'
               }`}
             >
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  {isSelected && (
-                    <span className="text-[color:var(--accent)] text-[10px]">●</span>
-                  )}
-                  <span className={`m-display text-[17px] truncate ${
-                    isSelected ? 'text-[color:var(--accent)]' : 'text-[color:var(--ink-strong)]'
-                  }`}>
-                    {store.name}
+              <button
+                onClick={onSelectStore ? handleSelect : handleNavigate}
+                className="flex-1 text-left py-3.5 flex items-baseline justify-between gap-4"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    {isSelected && (
+                      <span className="text-[color:var(--accent)] text-[10px]">●</span>
+                    )}
+                    <span className={`m-display text-[17px] truncate ${
+                      isSelected ? 'text-[color:var(--accent)]' : 'text-[color:var(--ink-strong)]'
+                    }`}>
+                      {store.name}
+                    </span>
+                  </div>
+                  {store.isOpen === false ? (
+                    <div className="mt-0.5 text-[11px] text-[color:var(--warn)]">closed</div>
+                  ) : store.closesAt ? (
+                    <div className="mt-0.5 text-[11px] text-[color:var(--ink-faint)]">
+                      closes {store.closesAt.toLowerCase()}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="text-right">
+                  <span className="m-display text-[16px] text-[color:var(--accent)] num-tabular">
+                    {value}
+                  </span>
+                  <span className="m-italic text-[12px] text-[color:var(--ink-faint)] ml-1">
+                    {unit === 'mi' ? 'mi' : 'ft'}
                   </span>
                 </div>
-                {store.isOpen === false ? (
-                  <div className="mt-0.5 text-[11px] text-[color:var(--warn)]">closed</div>
-                ) : store.closesAt ? (
-                  <div className="mt-0.5 text-[11px] text-[color:var(--ink-faint)]">
-                    closes {store.closesAt.toLowerCase()}
-                  </div>
-                ) : null}
-              </div>
-              <div className="text-right">
-                <span className={`m-display text-[16px] num-tabular ${
-                  isSelected ? 'text-[color:var(--accent)]' : 'text-[color:var(--accent)]'
-                }`}>
-                  {value}
-                </span>
-                <span className="m-italic text-[12px] text-[color:var(--ink-faint)] ml-1">
-                  {unit === 'mi' ? 'mi' : 'ft'}
-                </span>
-              </div>
-            </button>
+              </button>
+              {onSelectStore && (
+                <button
+                  onClick={handleNavigate}
+                  className="shrink-0 p-2 mr-1 text-[color:var(--ink-soft)] hover:text-[color:var(--accent)] transition-colors"
+                  aria-label={`Navigate to ${store.name}`}
+                  title="Open in Maps"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8L22 12L18 16" />
+                    <path d="M2 12H22" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </li>
         );
       })}

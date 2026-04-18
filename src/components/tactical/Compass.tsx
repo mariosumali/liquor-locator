@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import type { Coordinates } from '../../utils/geo';
 import { calculateBearing } from '../../utils/geo';
 
@@ -6,21 +6,6 @@ interface CompassProps {
   userLocation: Coordinates | null;
   storeLocation: Coordinates | null;
   deviceHeading: number | null;
-}
-
-function useSmoothedAngle(target: number, active: boolean): number {
-  const [display, setDisplay] = useState(target);
-  const accumulatedRef = useRef(target);
-  const lastTargetRef = useRef(target);
-  useEffect(() => {
-    if (!active) return;
-    const prev = lastTargetRef.current;
-    const delta = (((target - prev) % 360) + 540) % 360 - 180;
-    accumulatedRef.current = accumulatedRef.current + (Number.isFinite(delta) ? delta : 0);
-    lastTargetRef.current = target;
-    setDisplay(accumulatedRef.current);
-  }, [target, active]);
-  return display;
 }
 
 const MAJOR_DEGS = [30, 60, 120, 150, 210, 240, 300, 330] as const;
@@ -34,14 +19,12 @@ const CARDINALS: Array<{ label: string; angle: number }> = [
 export function Compass({ userLocation, storeLocation, deviceHeading }: CompassProps) {
   const hasData = Boolean(userLocation && storeLocation);
 
-  const target = useMemo(() => {
+  const needle = useMemo(() => {
     if (!userLocation || !storeLocation) return 0;
     const bearing = calculateBearing(userLocation, storeLocation);
     const rel = deviceHeading !== null ? bearing - deviceHeading : bearing;
     return ((rel % 360) + 360) % 360;
   }, [userLocation, storeLocation, deviceHeading]);
-
-  const needle = useSmoothedAngle(target, hasData);
 
   return (
     <div className="relative w-full max-w-[20rem] mx-auto aspect-square">
@@ -150,7 +133,6 @@ export function Compass({ userLocation, storeLocation, deviceHeading }: CompassP
           style={{
             transform: `rotate(${needle}deg)`,
             transformOrigin: '50px 50px',
-            transition: 'transform 500ms cubic-bezier(0.22, 1, 0.36, 1)',
             filter: hasData ? 'drop-shadow(0 0 3px rgba(245, 178, 51, 0.6))' : 'none',
           }}
         >

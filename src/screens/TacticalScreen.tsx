@@ -106,35 +106,39 @@ export function TacticalScreen({
                 </div>
               ) : (
                 <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-4 md:items-start">
-                  {/* Left column — compass + env */}
-                  <div className="flex flex-col gap-3">
-                    <div className="t-panel t-bracket p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="t-label t-caret">COMPASS · BEARING</div>
-                        <div className="t-label text-[9px] text-[color:var(--ink-faint)]">
-                          BRG {bearing !== null ? `${Math.round(bearing).toString().padStart(3, '0')}°` : '---°'}
-                        </div>
+                  {/* Compass - first on mobile, top-left on desktop */}
+                  <div className="order-1 md:order-none t-panel t-bracket p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="t-label t-caret">COMPASS · BEARING</div>
+                      <div className="t-label text-[9px] text-[color:var(--ink-faint)]">
+                        BRG {bearing !== null ? `${Math.round(bearing).toString().padStart(3, '0')}°` : '---°'}
                       </div>
-                      <Compass
-                        userLocation={userLocation}
-                        storeLocation={store?.coordinates ?? null}
-                        deviceHeading={deviceHeading}
-                      />
                     </div>
-
-                    <EnvPanel />
+                    <Compass
+                      userLocation={userLocation}
+                      storeLocation={store?.coordinates ?? null}
+                      deviceHeading={deviceHeading}
+                    />
                   </div>
 
-                  {/* Right column — target + secondary contacts */}
-                  <div className="flex flex-col gap-3">
+                  {/* Target - second on mobile, top-right on desktop */}
+                  <div className="order-2 md:order-none">
                     <TargetPanel
                       store={store}
                       bearing={bearing}
                       loading={storeLoading && !store}
                       onEngage={handleEngage}
                     />
+                  </div>
 
-                    {stores.length > 1 && (
+                  {/* Environment - third on mobile, bottom-left on desktop */}
+                  <div className="order-3 md:order-none">
+                    <EnvPanel />
+                  </div>
+
+                  {/* Contacts - fourth on mobile, bottom-right on desktop */}
+                  {stores.length > 1 && (
+                    <div className="order-4 md:order-none">
                       <ContactList
                         stores={stores.slice(1)}
                         userLocation={userLocation}
@@ -143,8 +147,8 @@ export function TacticalScreen({
                         selectedStoreId={selectedStoreId}
                         onSelectStore={onSelectStore}
                       />
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
             </>
