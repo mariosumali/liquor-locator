@@ -1,0 +1,33 @@
+{
+  "name": "Liquor Locator",
+  "short_name": "Liquor Locator",
+  "description": "Real-time compass to the nearest bottle shop. Find liquor stores with live distance tracking and tactical precision.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05110a",
+  "theme_color": "#05110a",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Liquor Locator tactical interface"
+    }
+  ],
+  "categories": ["lifestyle", "navigation", "utilities"],
+  "orientation": "portrait"
+}
