@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1a1414" />
+      <stop offset="100%" stop-color="#08070a" />
+    </radialGradient>
+    <linearGradient id="needle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fcd34d" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#bg)" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.4" />
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3" />
+  <polygon points="50,14 44,50 56,50" fill="url(#needle)" />
+  <polygon points="50,86 44,50 56,50" fill="#451a03" />
+  <circle cx="50" cy="50" r="7" fill="#fbbf24" />
+  <circle cx="50" cy="50" r="3" fill="#08070a" />
+</svg>

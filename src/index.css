@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Base reset + shared tokens
+   ============================================================ */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+  background: var(--bg-base, #0b0b0d);
+  color: var(--ink, #e9e4db);
+  font-family: var(--font-body, "Inter", system-ui, sans-serif);
+}
+
+#root {
+  min-height: 100svh;
+  position: relative;
+  isolation: isolate;
+  background: var(--bg-base, #0b0b0d);
+}
+
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--focus, rgba(236, 104, 72, 0.7));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Theme: MINIMAL (v2) — near-black, warm coral, editorial serif
+   ============================================================ */
+html[data-theme="minimal"] {
+  --bg-base: #0b0b0d;
+  --bg-raise: #121214;
+  --bg-inset: #0f0f11;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --panel-border-strong: rgba(255, 255, 255, 0.1);
+  --ink: #e9e4db;
+  --ink-strong: #f4efe5;
+  --ink-soft: rgba(233, 228, 219, 0.62);
+  --ink-faint: rgba(233, 228, 219, 0.38);
+  --ink-muted: rgba(233, 228, 219, 0.22);
+  --accent: #ec6848;          /* warm coral */
+  --accent-soft: #f28062;
+  --accent-ink: #140806;
+  --ok: #6bc38a;
+  --warn: #e07b48;
+  --focus: rgba(236, 104, 72, 0.7);
+
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================================
+   Theme: TACTICAL — dark ink-green, amber HUD, monospace
+   ============================================================ */
+html[data-theme="tactical"] {
+  --bg-base: #05110a;
+  --bg-raise: #0a1a12;
+  --bg-inset: #071b10;
+  --panel-border: rgba(145, 182, 130, 0.18);
+  --panel-border-strong: rgba(200, 232, 180, 0.28);
+  --ink: #cde6bc;                          /* pale phosphor green */
+  --ink-strong: #e7f4d6;
+  --ink-soft: rgba(205, 230, 188, 0.6);
+  --ink-faint: rgba(205, 230, 188, 0.36);
+  --ink-muted: rgba(205, 230, 188, 0.18);
+  --accent: #f5b233;                       /* amber / tactical yellow */
+  --accent-soft: #ffc95a;
+  --accent-ink: #1a1000;
+  --ok: #7dd987;
+  --warn: #e5633a;
+  --focus: rgba(245, 178, 51, 0.8);
+
+  --font-display: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-body: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+/* ============================================================
+   Shared animations
+   ============================================================ */
+@keyframes breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+.animate-breathe { animation: breathe 3.4s ease-in-out infinite; }
+
+@keyframes ping-soft {
+  0% { transform: scale(1); opacity: 0.6; }
+  80%, 100% { transform: scale(2.2); opacity: 0; }
+}
+.animate-ping-soft { animation: ping-soft 2.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  border-radius: 0.5rem;
+}
+
+/* ============================================================
+   MINIMAL theme utilities
+   ============================================================ */
+.m-bg {
+  background:
+    radial-gradient(
+      ellipse 70% 40% at 50% -10%,
+      rgba(236, 104, 72, 0.08) 0%,
+      rgba(236, 104, 72, 0.02) 40%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #0d0d10 0%, #09090b 60%, #08080a 100%);
+}
+
+.m-panel {
+  background: var(--bg-raise);
+  border: 1px solid var(--panel-border);
+  border-radius: 1rem;
+}
+
+.m-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.m-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.m-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+.m-tab-underline {
+  position: relative;
+}
+.m-tab-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.m-tab-underline[data-active="true"]::after { transform: scaleX(1); }
+
+/* ============================================================
+   TACTICAL theme utilities
+   ============================================================ */
+.t-bg {
+  background-color: #05110a;
+  background-image:
+    radial-gradient(
+      ellipse 80% 50% at 50% -5%,
+      rgba(245, 178, 51, 0.06) 0%,
+      rgba(245, 178, 51, 0.015) 40%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #061812 0%, #040e08 100%);
+}
+
+/* Tactical grid overlay for the whole app frame */
+.t-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(145, 182, 130, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145, 182, 130, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  z-index: 0;
+}
+
+/* Faint scanlines */
+.t-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+.t-panel {
+  background: var(--bg-raise);
+  border: 1px solid var(--panel-border);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(245, 178, 51, 0.02);
+}
+
+/* Corner brackets for tactical panels */
+.t-bracket {
+  position: relative;
+}
+.t-bracket::before,
+.t-bracket::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--accent);
+  border-style: solid;
+  opacity: 0.85;
+}
+.t-bracket::before {
+  top: -1px; left: -1px;
+  border-width: 1.5px 0 0 1.5px;
+}
+.t-bracket::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.t-mono {
+  font-family: var(--font-body);
+  font-feature-settings: "tnum", "ss01";
+}
+
+.t-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Unlayered .t-label wins over @layer utilities — use on solid accent fills */
+.t-label.t-label--on-accent {
+  color: var(--accent-ink);
+}
+
+.t-caret::before {
+  content: "▸";
+  color: var(--accent);
+  margin-right: 0.4em;
+}
+
+.t-dotline {
+  background-image: linear-gradient(
+    90deg,
+    var(--panel-border-strong) 50%,
+    transparent 0
+  );
+  background-size: 6px 1px;
+  background-repeat: repeat-x;
+  background-position: left center;
+  height: 1px;
+}
+
+.t-accent-glow {
+  box-shadow:
+    0 0 0 1px rgba(245, 178, 51, 0.35),
+    0 0 14px -2px rgba(245, 178, 51, 0.5);
+}
+
+/* Radar sweep beam (tactical + minimal) */
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-radar-sweep {
+  animation: radar-sweep 3.2s linear infinite;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Softer outer ring pulse — reads as live scope */
+@keyframes radar-ring-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+.animate-radar-ring {
+  animation: radar-ring-pulse 2.8s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Legacy alias */
+.animate-sweep { animation: radar-sweep 3.2s linear infinite; transform-origin: 50% 50%; will-change: transform; }
+
+/* Subtle vertical segment flicker for tactical status strip */
+@keyframes segFlicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.4; }
+  98% { opacity: 0.8; }
+}
+.animate-flicker { animation: segFlicker 8s steps(1, end) infinite; }
+
+/* Tabular numerics helper (shared) */
+.num-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
